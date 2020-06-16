@@ -1,21 +1,21 @@
-var express = require('express');
+const express = require('express');
 // 处理post请求数据
-var bodyParser = require('body-parser');
+const bodyParser = require('body-parser');
 // 日志管理
-var logger = require('morgan');
-// 错误处理函数，文档上面说仅限于开发环境，至于为什么之前的大佬们没在正式环境上面做一次区分我也不知道
-var errorHandler = require('errorhandler');
-var path = require('path');
-var expressValidator = require('express-validator');
+const logger = require('morgan');
+// 错误处理函数
+const errorHandler = require('errorhandler');
+const path = require('path');
+const expressValidator = require('express-validator');
 // 防止请求中出现XSS攻击
-var xss = require('xss');
+const xss = require('xss');
 // 上传存储处理 注意处理 nginx 上传 1M 限制
-var multer = require('multer');
+const multer = require('multer');
 // 加密处理
-var crypto = require('crypto');
+const crypto = require('crypto');
 // 这个地方也可以使用path来获取后缀名的
-var mime = require('mime');
-var storage = multer.diskStorage({
+const mime = require('mime');
+const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, './uploads/')
   },
@@ -25,17 +25,17 @@ var storage = multer.diskStorage({
     })
   }
 });
-var uploads = multer({storage: storage});
+const uploads = multer({storage: storage});
 // 加载各种秘钥信息
-var dotenv = require('dotenv');
+const dotenv = require('dotenv');
 dotenv.load({ path: '.env' });
 
 
 // 控制器
-var appsController = require('./controllers/apps');
-var proxyController = require('./controllers/proxy');
+const appsController = require('./controllers/apps');
+const proxyController = require('./controllers/proxy');
 
-var app = express();
+const app = express();
 app.set('port', process.env.PORT || 3000);
 // 指定模版引擎
 app.set('views', path.join(__dirname, 'views'));
@@ -75,7 +75,7 @@ app.use('/uploads',express.static(path.join(__dirname, 'uploads'), {maxAge: 3155
 app.get('/', appsController.getApps);
 
 app.get('/apps/*', appsController.auth);
-// 转发代理
+// 代理
 app.use('/', proxyController.forward);
 app.use(errorHandler());
 

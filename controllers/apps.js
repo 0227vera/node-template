@@ -1,10 +1,10 @@
-var Promise = require('yaku');
-var suitesDB = require('../config/db').suites;
-var permenentCodesDB = require('../config/db').permenentCodes;
-var APICorp = require('wechat-corp-service');
+const Promise = require('yaku');
+const suitesDB = require('../config/db').suites;
+const permenentCodesDB = require('../config/db').permenentCodes;
+const APICorp = require('wechat-corp-service');
 
 exports.getApps = function(req, res, next){
-  var suitesDB = require('../config/db').suites;
+  const suitesDB = require('../config/db').suites;
   suitesDB.find({}, function(err, docs) {
     if(err) { return next(err) }
     res.render('apps', { suites: docs, timestamp: new Date().getTime()})
@@ -13,23 +13,23 @@ exports.getApps = function(req, res, next){
 
 exports.auth = function(req, res){
   console.log(req.originalUrl);
-  var suitePath = req.originalUrl.replace(/^\/+apps\//, '');
+  const suitePath = req.originalUrl.replace(/^\/+apps\//, '');
   suitePath = suitePath.replace(/\?.+/, '');
   if(!suitePath) {
     return res.redirect('/');
   }
-  var apiCrop;
-  var authCode = req.query.auth_code;
-  var state = req.query.state;
-  var expiresIn = req.query.expires_in;
-  var theSuite;
+  const apiCrop;
+  const authCode = req.query.auth_code;
+  const state = req.query.state;
+  const expiresIn = req.query.expires_in;
+  const theSuite;
   /**
    * 1. 根据 suitePath 拿到 suiteTicket;
    * 2. new APICorp(suiteid,suite_secret,suite_ticket).getPreAuthCode 拿到预授权码;
    * 3. 生成授权URL；
    * 4. 渲染页面；
    */
-  var getSuite = new Promise(function(resolve, reject) {
+  const getSuite = new Promise(function(resolve, reject) {
     suitesDB.findOne({path:suitePath}, function(err, suite){
       if(err) {return reject(err)}
       if(!suite) {
@@ -43,36 +43,36 @@ exports.auth = function(req, res){
     })
   });
 
-  var getAuthUrl = function(suite) {
+  const getAuthUrl = function(suite) {
     /**
      * Don\'t save token in memory, when cluster or multi-computer!
      * !!! 注意这里cluster 模式应该存储下 suite_access_token 不能存在内存中
      * !!! 现在用户少，就先不处理了。 具体可见 wechat-corp-service api_common.js
      */
     apiCrop = new APICorp(suite.suiteId, suite.suiteSecret, suite.suiteTicket);
-    var appIds = [];
-    for(var i = 0; i < suite.apps.length; i++) {
+    const appIds = [];
+    for(const i = 0; i < suite.apps.length; i++) {
       appIds.push(suite.apps[i]);
     }
     return new Promise(function(resolve, reject){
       apiCrop.getPreAuthCode(appIds, function(err, result){
         if(err) {return reject(err)}
-        var redirectUrl = process.env.DOMAIN + '/apps/' + suite.path;
-        var authUrl = apiCrop.generateAuthUrl(result.pre_auth_code, encodeURIComponent(redirectUrl), 'OK');
+        const redirectUrl = process.env.DOMAIN + '/apps/' + suite.path;
+        const authUrl = apiCrop.generateAuthUrl(result.pre_auth_code, encodeURIComponent(redirectUrl), 'OK');
         resolve(authUrl);
       })
     });
   };
-  var renderPage = function(authUrl){
-      var authSuccess = false;
+  const renderPage = function(authUrl){
+      const authSuccess = false;
       // 授权成功
       if(authCode && state === 'OK'){
         authSuccess = true;
         apiCrop.getPermanentCode(authCode, function(err, result){
             if(err) { console.warn(err);return;}
-            var corpId= result.auth_corp_info.corpid;
-            var permanentCode = result.permanent_code;
-            var authedSuite = {
+            const corpId= result.auth_corp_info.corpid;
+            const permanentCode = result.permanent_code;
+            const authedSuite = {
               corpId: corpId,
               suite: suitePath,
               permanentCode:permanentCode,
