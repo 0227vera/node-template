@@ -30,9 +30,6 @@ const uploads = multer({storage: storage});
 const dotenv = require('dotenv');
 dotenv.load({ path: '.env' });
 
-
-// 控制器
-const appsController = require('./controllers/apps');
 const proxyController = require('./controllers/proxy');
 
 const app = express();
@@ -71,10 +68,6 @@ app.use(express.static(path.join(__dirname, 'public'), {
 }));
 
 app.use('/uploads',express.static(path.join(__dirname, 'uploads'), {maxAge: 31557600000}));
-
-app.get('/', appsController.getApps);
-
-app.get('/apps/*', appsController.auth);
 // 代理
 app.use('/', proxyController.forward);
 app.use(errorHandler());

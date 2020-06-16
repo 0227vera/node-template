@@ -8,7 +8,7 @@ exports.forward = function(req, res) {
   if (!apiServer || !jwtToken) {
     const UrlObj = URL.parse(req.url, true)
     const pathname = UrlObj.pathname
-    const msg = '你没有权限, 请联系管理员。<div style="margin-top: 30px;color: #999;">host: ' + req.headers.host + '<br/>url: ' + req.url + '<br/>';
+    const msg = '未找到页面。<div style="margin-top: 30px;color: #999;">host: ' + req.headers.host + '<br/>url: ' + req.url + '<br/>';
     if (pathname) {
       const arr = pathname.split('/');
       if (arr.length > 1 && /3$/.test(arr[1])) {
