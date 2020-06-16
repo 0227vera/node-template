@@ -1,0 +1,22 @@
+[{
+  name: '测试组件',
+  path: 'test_suit',
+  desc: '测试组件是为应对学校复杂业务而设计开发的移动端办公套件，包含学校办文办公、综合协调、上传下达等工作，帮助用户。'
+  suiteId: 'tj2ea022487a2c71d2',
+  suiteTicket: '',
+  suiteTicketTimeStamp: '20012012',
+  suiteSecret: 'ycwlFTxRZJclb3iw7uVCZ4pwOCX_ibi4A2qor9PzNPgg6tOejPqhYQUkTFO2E4c0',
+  redirectUri: 'http://qyauth.lezhiyun.cn/apps/education_management1',
+  authUrl: 'http://qyauth.lezhiyun.cn/apps/education_management1',
+  apps: [{
+    id: 1,
+    name: '工资查询',
+    path: 'school_salary',
+    desc: '教职工可以通过移动端查询本人历史工资及其明细，了解工资收入构成。提供密码查询功能，保证个人工资隐私性。'
+  },{
+    id: 2,
+    name: '活动申请',
+    path: 'school_activity_apply',
+    desc: '活动申请是一款为学校教职工提供一个在线预约校内或者校外活动的工具。'
+  }]
+}]
